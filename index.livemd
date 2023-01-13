@@ -1,0 +1,9 @@
+# Meet Kafka
+
+## Section
+
+![](images/kafka_logo.jpeg)
+
+<!-- livebook:{"break_markdown":true} -->
+
+[Next ->](./slides/1_what_is_kafka.livemd)

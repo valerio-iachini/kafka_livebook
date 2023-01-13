@@ -1,0 +1,38 @@
+# Kafka Security
+
+## Section
+
+Authentication of connections to brokers from clients (producers and consumers), other brokers and tools, using either **SSL** or **SASL**.
+
+Kafka servers support listening for connections on multiple ports. This is configured through the listeners property in the server configuration, which accepts a comma-separated list of the listeners to enable. At least one listener must be defined on each server. The format of each listener defined in listeners is given below:
+
+```
+{LISTENER_NAME}://{hostname}:{port}
+```
+
+The `LISTENER_NAME` is usually a descriptive name which defines the purpose of the listener. For example, many configurations use a separate listener for client traffic, so they might refer to the corresponding listener as CLIENT in the configuration:
+
+```
+listeners=CLIENT://localhost:9092
+```
+
+The security protocol of each listener is defined in a separate configuration: `listener.security.protocol.map`. The value is a comma-separated list of each listener mapped to its security protocol. For example, the follow value configuration specifies that the CLIENT listener will use SSL while the BROKER listener will use plaintext.
+
+```
+listener.security.protocol.map=CLIENT:SSL,BROKER:PLAINTEXT
+```
+
+Possible options for the security protocol are given below:
+
+* PLAINTEXT
+* SSL
+* SASL_PLAINTEXT
+* SASL_SSL
+
+In a KRaft cluster, a broker is any server which has the broker role enabled in `process.roles` and a controller is any server which has the controller role enabled. Listener configuration depends on the role. The listener defined by `inter.broker.listener.name` is used exclusively for requests between brokers. Controllers, on the other hand, must use separate listener which is defined by the `controller.listener.name`s configuration. This cannot be set to the same value as the inter-broker listener.
+
+<h3>
+ACL
+</h3>
+
+https://kafka.apache.org/documentation/#security_authz_examples

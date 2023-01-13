@@ -1,0 +1,40 @@
+# Kafka Producer
+
+## Section
+
+<img src="images/streams-and-tables-p1_p4.png" alt="drawing" width="600" />
+
+<!-- livebook:{"break_markdown":true} -->
+
+The producer determines which partition to send each message to. Typically, one of the following approaches is used:
+
+* Round-robin: this approach is used if the message has no key
+* Hashing-key: the key is hashed and the result is used to determine the partition using the formula `hash(key) mod #partitions`
+
+Additionally, custom logic can be implemented to determine the partition for a message.
+
+When writing to Kafka, producers can choose whether they wait for the message to be acknowledged by **0,1 or all (-1) replicas**.
+
+> 📓 Note that "acknowledgement by all replicas" does not guarantee that the full set of assigned replicas have received the message. By default, when **acks=all**, acknowledgement happens as soon as all the current in-sync replicas have received the message.
+
+<h3>
+Message Delivery Semantics
+</h3>
+
+If a producer failed to receive a response indicating that a message was committed, it had little choice but to resend the message. This provides at-least-once delivery semantics since the message may be written to the log again during resending if the original request had in fact succeeded.
+
+> 📓 Since 0.11.0.0, the Kafka producer also supports an idempotent delivery option which guarantees that resending will not result in duplicate entries in the log. To achieve this, the broker assigns each producer an ID and deduplicates messages using a sequence number that is sent by the producer along with every message.
+
+<h3>
+Dumb Vs Smart Brokers
+</h3>
+
+The distinction between dumb and smart brokers refers to the ability of a broker to route messages based on certain conditions:
+
+* **RabbitMQ** - the producer sends a message to an Exchange, which then routes the message to a Queue. The Exchange is responsible for routing, making it a "smart broker."
+
+* **Kafka** - brokers do not route messages. The producer is responsible for determining the topic and partition to which each message should be sent
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<- Previous](./4_kafka_partition_replication.livemd) | [Next ->](./6_kafka_consumer.livemd)

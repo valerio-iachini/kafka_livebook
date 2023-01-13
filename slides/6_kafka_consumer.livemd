@@ -1,0 +1,58 @@
+# Kafka Consumer
+
+## Section
+
+The Kafka consumer works by **issuing "fetch" requests** to the brokers leading the partitions it wants to consume. The consumer specifies its offset in the log with each request and receives back a chunk of log beginning from that position.
+
+> 📓 The consumer has significant control over this position and can rewind it to re-consume data if need be.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<img src="images/ktdg_04in05.png" alt="drawing" width="200" />
+
+<!-- livebook:{"break_markdown":true} -->
+
+When instantiating a consumer, **you must configure a unique group ID**. It is possible to add multiple consumers in a consumer group as long as there are enough topic partitions to distribute among them.
+
+> 🚸 If a topic has 10 partitions, an 11th consumer will be **IDLE**.
+
+**Message delivery order is guaranteed among consumers within the same consumer group.**
+
+<!-- livebook:{"break_markdown":true} -->
+
+<h3>
+Message Delivery Semantics
+</h3>
+
+It has several options for processing the messages and updating its position:
+
+* **At most once** - It can read the messages, then save its position in the log, and finally process the messages. In this case there is a possibility that the consumer process crashes after saving its position but before saving the output of its message processing.
+* **At least once** - It can read the messages, process the messages, and finally save its position. In this case there is a possibility that the consumer process crashes after processing messages but before saving its position.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<h3>
+Consumer Offset
+</h3>
+
+A Kafka consumer is able to track the highest offset it has processed in each partition and has the ability to save these offsets so that it can continue from that point if it is restarted.
+
+**The group coordinator, which is a designated broker for a specific consumer group, is responsible for storing all offsets for that group.** Any consumer in that group must send its offset commits and requests to that group coordinator.
+
+Consumer groups are assigned coordinators based on their group names, and a consumer can find its coordinator by sending a `FindCoordinatorRequest` to any Kafka broker and reading the FindCoordinatorResponse for coordinator details. If the coordinator moves, the consumer will have to find it again. When the group coordinator receives an `OffsetCommitRequest`, it adds the request to a special **Kafka topic** called `__consumer_offsets`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<h3>
+Push Vs Pull
+</h3>
+
+Both push and pull-based systems have their advantages and disadvantages. However:
+
+* a push-based system can struggle with diverse consumers as the broker controls the rate at which data is transferred. The goal is for the consumer to consume at the maximum possible rate but this can lead to the consumer being overwhelmed if it falls below the rate of production.
+
+* A pull-based system allows the consumer to catch up when it can. Additionally, a pull-based system allows for aggressive batching of data sent to the consumer, which can be more efficient than a push-based system
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<- Previous](./5_kafka_producer.livemd) | [Next ->](./7_kafka_security.livemd)

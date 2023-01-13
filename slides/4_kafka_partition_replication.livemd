@@ -1,0 +1,78 @@
+# Kafka Partition Replication
+
+```elixir
+Mix.install(
+  [
+    {:kino, "~> 0.7.0"},
+    {:kafka_ex, "~> 0.11"},
+    {:kino_vega_lite, "~> 0.1.4"}
+  ],
+  config: [
+    kafka_ex: [
+      kafka_version: "kayrock",
+      brokers: [
+        {"localhost", 19092},
+        {"localhost", 29092},
+        {"localhost", 39092}
+      ]
+    ]
+  ]
+)
+```
+
+## Section
+
+Kafka replicates the log for each topic's partitions across a configurable number of servers (n):
+
+* 1 partition leader
+* n-1 followers
+
+**The total number of replicas including the leader constitute the replication factor.**
+
+Write operations occur on the leader, while read operations may occur on any of the followers. Typically, there are many more partitions than brokers and the leaders are evenly distributed among brokers.
+
+> 📓 Followers consume messages from the leader just as a normal Kafka consumer would and apply them to their own log.
+
+Kafka, a special node known as the "controller" is responsible for managing the registration of brokers in the cluster. Broker liveness has two conditions:
+
+* Brokers must maintain an active session with the controller in order to receive regular metadata updates. (For KRaft clusters, an active session is maintained by sending periodic heartbeats to the controller)
+* Brokers acting as followers must replicate the writes from the leader and not fall "too far" behind.
+
+**The leader keeps track of the set of "in sync" replicas, which is known as the ISR. If either of these conditions fail to be satisified, then the broker will be removed from the ISR.**
+
+> 📓 **A message is considered committed when all replicas in the ISR for that partition have applied it to their log.** Only committed messages are ever given out to the consumer. This means that the consumer need not worry about potentially seeing a message that could be lost if the leader fails.
+
+Kafka dynamically maintains a set of in-sync replicas (ISR) that are caught-up to the leader. Only members of this set are eligible for election as leader. A write to a Kafka partition is not considered committed until all in-sync replicas have received the write. Because of this, any replica in the ISR is eligible to be elected leader. With this ISR model and `f+1` replicas, a Kafka topic can tolerate `f` failures without losing committed messages.
+
+```elixir
+alias KafkaEx.Protocol.CreateTopics.TopicRequest
+alias KafkaEx.Protocol.CreateTopics.ConfigEntry
+alias KafkaEx.Protocol.CreateTopics.Response, as: CreateTopicsResponse
+
+KafkaEx.start_link_worker(:create_topic, server_impl: KafkaEx.New.Client)
+
+KafkaEx.create_topics(
+  [
+    %TopicRequest{topic: "foo_replicated", num_partitions: 3, replication_factor: 3}
+  ],
+  worker_name: :create_topic
+)
+
+# Review the topic metadata to understand the terms discussed in this page
+KafkaEx.metadata(topic: "foo_replicated")
+```
+
+<h3>
+What if they all die?
+</h3>
+
+Kafka's guarantee of data loss is dependent on at least one replica remaining in sync. **If all replicas for a partition fail, this guarantee is no longer valid.** In this scenario, the system must make a decision on how to proceed. Two options that could be implemented are:
+
+* waiting for a replica in the ISR to come back online and selecting it as the leader
+* choosing the first replica that comes back online, regardless of its status in the ISR
+
+This decision is a balance between ensuring **availability** and maintaining **consistency**. If the system waits for replicas in the ISR, it may remain unavailable for a longer period of time. If these replicas were destroyed or lost, the system may be permanently down. However, if a non-in-sync replica is chosen as the leader, its log becomes the source of truth, even though it may not have all committed messages. By default, Kafka chooses the first strategy.
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<- Previous](./3_kafka_distributed_system.livemd) | [Next ->](./5_kafka_producer.livemd)

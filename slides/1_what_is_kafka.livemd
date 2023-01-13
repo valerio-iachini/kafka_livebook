@@ -1,0 +1,42 @@
+# What is Kafka?
+
+```elixir
+Mix.install(
+  [
+    {:kafka_ex, "~> 0.11"}
+  ],
+  config: [
+    kafka_ex: [
+      brokers: [
+        {"localhost", 19092},
+        {"localhost", 29092},
+        {"localhost", 39092}
+      ]
+    ]
+  ]
+)
+```
+
+## Section
+
+Kafka is an event streaming platform.
+
+> 📽️ Kafka was created to address the data pipeline problem at LinkedIn. It was designed to provide a high-performance messaging system that can handle many types of data and provide clean, structured data about user activity and system metrics in real time.
+
+An **event** is a thing that happend combined with the description of what happened.
+
+<p style="text-align: center; weight">
+  <b>NOTIFICATION (When-ness to the thing) + STATE (description)</b>
+</p>
+
+The state is typically represented using JSON, JSON Schema, AVRO, or Protobuf. **An event in Kafka is a key-value pair (sequence of bytes)**. Internally, **Kafka is loosely typed**.
+
+<!-- livebook:{"break_markdown":true} -->
+
+The **key** for an event in Kafka can be a complex domain object, but it is often a primitive type like a string or integer. The key typically serves as an **identifier for a domain object**.
+
+E.g. `vendor_id`
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<- Previous](../index.livemd) | [Next ->](./2_kafka_topic.livemd)
