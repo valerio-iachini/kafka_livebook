@@ -1,4 +1,4 @@
-# kafka_livebook
+# Kafka Livebook
 
 This repository contains a livebook that provides an introduction to Kafka and examples in Elixir. The main objective of this livebook is to introduce the basics of Kafka and its core concepts, along with providing examples of how to use the Kafka in Elixir.
 
