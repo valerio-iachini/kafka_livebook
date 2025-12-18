@@ -1,8 +1,10 @@
+<!-- livebook:{"file_entries":[{"name":"kafka_logo.jpeg","type":"attachment"}]} -->
+
 # Meet Kafka
 
 ## Section
 
-![](images/kafka_logo.jpeg)
+![](files/kafka_logo.jpeg)
 
 <!-- livebook:{"break_markdown":true} -->
 

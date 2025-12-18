@@ -1,3 +1,5 @@
+<!-- livebook:{"file_entries":[{"name":"Kafka_KRaft_Mode_1.jpg","type":"attachment"},{"name":"anatomy_topic.jpg","type":"attachment"}]} -->
+
 # Kafka is a distributed system
 
 ```elixir
@@ -33,7 +35,7 @@ A Kafka cluster is a collection of brokers that reach consensus by communicating
 
 <!-- livebook:{"break_markdown":true} -->
 
-![](images/Kafka_KRaft_Mode_1.jpg)
+![](files/Kafka_KRaft_Mode_1.jpg)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -67,7 +69,11 @@ The messages are distributed between partitions:
 
 <!-- livebook:{"break_markdown":true} -->
 
-![](images/anatomy_topic.jpg)
+![](files/anatomy_topic.jpg)
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](files/anatomy_topic.jpg)
 
 ```elixir
 alias KafkaEx.Protocol.CreateTopics.TopicRequest

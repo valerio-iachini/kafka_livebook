@@ -1,3 +1,5 @@
+<!-- livebook:{"file_entries":[{"name":"ktdg_04in05.png","type":"attachment"}]} -->
+
 # Kafka Consumer
 
 ## Section
@@ -8,7 +10,7 @@ The Kafka consumer works by **issuing "fetch" requests** to the brokers leading 
 
 <!-- livebook:{"break_markdown":true} -->
 
-<img src="images/ktdg_04in05.png" alt="drawing" width="200" />
+![](files/ktdg_04in05.png)
 
 <!-- livebook:{"break_markdown":true} -->
 

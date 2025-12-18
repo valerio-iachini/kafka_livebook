@@ -1,10 +1,12 @@
+<!-- livebook:{"file_entries":[{"name":"kafka-topics.png","type":"attachment"},{"name":"log_compaction.png","type":"attachment"}]} -->
+
 # Kafka Topics
 
 ```elixir
 Mix.install(
   [
     {:kino, "~> 0.7.0"},
-    {:kafka_ex, "~> 0.11"},
+    {:kafka_ex, "~> 0.15"},
     {:kino_vega_lite, "~> 0.1.4"}
   ],
   config: [
@@ -26,7 +28,7 @@ A topic is a named container for similar events:
 
 <!-- livebook:{"break_markdown":true} -->
 
-![](images/kafka-topics.png)
+![](files/kafka-topics.png)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -177,7 +179,11 @@ Enum.each(1..10, fn i ->
 end)
 ```
 
-![](images/log_compaction.png)
+![](files/log_compaction.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](files/log_compaction.png)
 
 ```elixir
 KafkaEx.fetch("foo_compact", 0, offset: 0)

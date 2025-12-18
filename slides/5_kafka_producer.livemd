@@ -1,8 +1,10 @@
+<!-- livebook:{"file_entries":[{"name":"streams-and-tables-p1_p4.png","type":"attachment"}]} -->
+
 # Kafka Producer
 
 ## Section
 
-<img src="images/streams-and-tables-p1_p4.png" alt="drawing" width="600" />
+![](files/streams-and-tables-p1_p4.png)
 
 <!-- livebook:{"break_markdown":true} -->
 

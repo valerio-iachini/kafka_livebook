@@ -36,3 +36,7 @@ ACL
 </h3>
 
 https://kafka.apache.org/documentation/#security_authz_examples
+
+<!-- livebook:{"break_markdown":true} -->
+
+[<- Previous](./6_kafka_consumer.livemd)
